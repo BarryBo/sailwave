@@ -1,0 +1,175 @@
+{# MIT License #}
+<!DOCTYPE html>
+<html>
+
+{# Style Sheet for printing - thicker borders on tables #}
+<style type="text/css" media="print">
+    body { 
+        margin: 0;
+    }
+    table {
+        border: 3px solid black;
+        border-collapse: collapse;
+    }
+    td, th {
+        border: 3px solid black
+    }
+</style>
+{# Style Sheet for the screen #}
+<style type="text/css" media="screen">
+    body { 
+        margin: 0;
+    }
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td, th {
+        border: 1px solid black
+    }
+</style>
+
+{# Jinja2 varables used... they are referenced inside double squigly braces {{...name... }}
+ - racetitle - passed from the "--name" command line argument unchanged
+ - fleet - the fleet name, such as "Buccaneer 18"
+ - competitors - the list of all competitors
+ These flow in from the Python side template.render() function call.
+
+Then for each competitor in the competitors list, Jinja2 has access to:
+ - competitor.sailno
+ - competitor.altsailno
+ - competitor.boat
+ - competitor.helmname
+#}
+
+    <title>Scoring sheet for {{fleet}}</title>
+    <body style="font-size: larger;">
+        <p style="text-align:left;">
+            {{racetitle}}
+            <span style="float:right;">
+                {{fleet}}
+            </span>
+        </p>
+        <p style="text-align: center;">
+            FINISH TIMES REQUIRED
+        </p>
+        <p>&nbsp;</p>
+{# Lay out the fill-in-the-blank portion near the top #}
+        <div id="contentBox" style="margin:0px auto; width:90%">
+
+            <div id="column1" style="float:left; margin:0; width:30%;">
+            Scorer ______________________
+            </div>
+        
+            <div id="column2" style="float:left; margin:0;width:20%;">
+            Date ________________
+            </div>
+        
+            <div id="column3" style="float:left; margin:0;width:20%">
+            Race # ____________
+            </div>
+
+            <div id="column4" style="float:left; margin:0;width:20%">
+            Race Starting Time ___________
+            </div>
+
+            <div id="column5" style="float:left; margin:0;width:10%">
+            Course _________
+            </div>
+        </div>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <table style="width:100%;border: none;">
+          <tr>
+            <th style="width: 60%;border: none;">
+{# Table representing the set of registered competitors #}
+            <table style="width:100%;">
+                <tr>
+                    <th style="width: 10%;">Checked In?</th>
+                    <th style="width: 20%;"># People On Board</th>
+                    <th style="width: 10%;">Started?</th>
+                    <th>Sail#</th>
+                    <th>Boat Name</th>
+                    <th>Skipper</th>
+                </tr>
+{# The below section is replicated once per competitor #}
+{% for competitor in competitors %}
+                <tr>
+                    <td>Y / N</td>
+                    <td></td>
+                    <td>Y / N</td>
+{% if competitor.altsailno == "" %}            
+                    <td><div>{{competitor.sailno}}</div><div>{{competitor.altsailno}}</div></td>
+{% else %}        
+                    <td><div>{{competitor.sailno}}</div><div>Alt: {{competitor.altsailno}}</div></td>
+{% endif %}
+                    <td>{{competitor.boat}}</td>
+                    <td>{{competitor.helmname}}</td>
+                </tr>
+{% endfor %}                
+            </table>
+            </th>
+            <th style="width: 40%;border: none;">
+{# Fixed table of finish order/sail#/finish time, to be filled in as competitors finish #}
+            <table style="width:100%;">
+                <tr>
+                    <th>Finishing Order</th>
+                    <th style="width: 40%;">Sail#</th>
+                    <th style="width: 40%">Finish Time</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="row">DNF = Did Not Finish</div>
+            <div class="row">DSQ = Disqualified</div>
+            <div class="row">RET = Retired</div>
+            <div class="row">OCS = On Course Side</div>
+                </th>
+            </tr>
+        </table>
+    </body>
+</html>
